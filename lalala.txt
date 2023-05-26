@@ -1,0 +1,78 @@
+// Подклюение БД
+
+<?php
+    define('DB_SERVER', 'localhost');
+    define('DB_USERNAME', 'root');
+    define('DB_PASSWORD', '');
+    define('DB_NAME', 'proekt');
+?>
+
+
+// Отправка в БД
+
+№1   <form action="auth.php" method="post">
+
+        <input class="input" type="text" name="login1"/>
+
+        <td colspan="2" align="center"><input class="hero__button" type="submit" value="Зарегистрироваться" name="submit"></td>
+   </form>
+
+№2   <?php
+    require_once 'link.php';
+
+    if($_POST['submit']){
+
+        $link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+
+        $users = "SELECT * FROM users";
+        $result_select = mysqli_query($link, $users);
+        $login1 = htmlentities(mysqli_real_escape_string($link, $_POST['login1']));
+
+        $sql = "INSERT INTO users (login1) VALUES ('$login1')";
+
+        $result1 = mysqli_query($link, $sql) or die("Ошибка " . mysqli_error($link));
+        if($result1)
+        {
+            echo "<span></span>";
+        }
+
+        mysqli_close($link);
+    }
+
+    else{
+        exit("Error");
+    }
+?>
+
+// Вывод из БД
+
+<?php
+
+  session_start();
+
+$hostname = 'localhost';
+$username = 'root';
+$passwordname = '';
+$basename = 'DZ';
+$conn = new mysqli($hostname, $username, $passwordname, $basename);
+
+
+$sql = "SELECT * FROM `student`";
+
+
+$result = $conn->query($sql); 
+?>
+
+<table>
+    <table width="50%" align="center">
+        <? while ($row = $result->fetch_assoc()) {
+            echo '<tr class="tr-admin" style="font-size:20px;" >';
+            echo '<td class="td-admin size"  >'.$row['secondname'];
+            echo '</td>';
+            echo '<td class="td-admin size">'.$row['firstname'];
+            echo '</td>';
+            echo '<td class="td-admin size">'.$row['middlename'];
+            echo '</td>';
+            echo '</tr>';
+        } ?>
+    </table>
